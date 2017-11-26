@@ -153,3 +153,9 @@ input.MyButton:hover {
     background: #000;
     border: 1px solid #fff;
 }
+.infotype{
+    width: 100%;
+    font-family: "Palatino Linotype";
+    font-style: normal;
+    text-align: center;
+}

@@ -28,7 +28,7 @@
                 <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">Options
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" onclick="PrivilegeEscalation()"> PriviledgeEscalation </a>
                     </li>
@@ -134,8 +134,8 @@
           if (i != 0 && links[i].source == links[i-1].source && links[i].target == links[i-1].target) {
             links[i].linknum = links[i-1].linknum + 1;
           }
-          else {links[i].linknum = 1;};
-        };
+          else {links[i].linknum = 1;}
+        }
 
         var nodes = {};
 
@@ -172,26 +172,26 @@
             if(tag == "LP"){
               for(var i = 0; i<nodev.length; i++){
                 if(nodev[i].name == d.name){
-                  document.getElementById("info").innerHTML="<br>"+nodev[i].value+"</br>";}
+                  document.getElementById("info").innerHTML="<label class='info-type'>"+nodev[i].value+"</label>";}
               }}
 
             if(tag == "P"){
               for(var i = 0; i <links.length; i++){
                 if(links[i].source.name == d.name || links[i].target.name == d.name)
-                  document.getElementById("info").innerHTML = "<br>" + "resource: " + links[i].value + "</br>";}
+                  document.getElementById("info").innerHTML="<label class='infotype'>" + "resource: " + links[i].value + "</label>";}
 
             }
 
             if(tag == "I"){
               for(var i = 0; i <intentSpoofingInstances.length; i++){
                 if(links[i].source.name == d.name || links[i].target.name == d.name)
-                  document.getElementById("info").innerHTML = "<br>" + "legitimate: " + links[i].value + "</br>";}
+                  document.getElementById("info").innerHTML = "<label class='infotype'>" + "legitimate: " + links[i].value + "</label>";}
             }
 
             if(tag == "U"){
               for(var i = 0; i <unauthorizedIntentReceiptInstances.length; i++){
                 if(links[i].source.name == d.name || links[i].target.name == d.name)
-                  document.getElementById("info").innerHTML = "<br>" + "legitimate: " + links[i].value+"</br>";}
+                  document.getElementById("info").innerHTML = "<label class='infotype'>" + "legitimate: " + links[i].value+"</label>";}
             }
 
             return tooltip.style("visibility", "visible");})
