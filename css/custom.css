@@ -1,0 +1,155 @@
+body, html{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+.body_index {
+    vertical-align: middle;
+    text-align: center;
+    margin-top: 20%;
+}
+.jumbotron{
+    background-color: #B2DFDB;
+    height: 100%;
+    font-family: "Palatino Linotype";
+}
+.btn-info{
+    background-color: #4DB6AC;
+}
+.btn-info{
+    width: 30%;
+}
+.link-font{
+    color: white;
+}
+.left-pane{
+    width: 20%;
+    height: 100%;
+    float: left;
+    background: linear-gradient(to right, #B2DFDB, honeydew);
+    border-width: medium;
+    border-color: #9d9d9d;
+
+}
+.right-pane{
+    width: 80%;
+    height: 100%;
+    float: right;
+    border-collapse: collapse;
+
+}
+.container-3{
+    width: 100%;
+    height: 90%;
+}
+.container-2{
+    text-align: center;
+    background: linear-gradient(to right, honeydew, white);
+}
+.container-1{
+    width: 100%;
+    height: 90%;
+    margin-top: 0%;
+}
+.option-btn{
+    text-align: right;
+    font-family: "Palatino Linotype";
+    font-size: large;
+}
+.capital{
+    margin-left: 10%;
+    font-family: "Palatino Linotype";
+}
+.capital-1{
+    font-family: "Palatino Linotype";
+}
+.page-header{
+    height: 10%;
+}
+.link {
+    stroke: #ccc;
+}
+
+.node text {
+    pointer-events: none;
+    font: 10px "Palatino Linotype";
+}
+
+path.link {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5px;
+}
+
+marker#domain-permission-enforcement {
+    fill: green;
+}
+
+path.link.domain-permission-enforcement {
+    stroke: green;
+}
+
+marker#domain-permission-granted{
+    fill: blue;
+}
+
+path.link.domain-permission-granted{
+    stroke: blue;
+}
+
+marker#domain-permission-usage {
+    fill: orange;
+}
+
+path.link.domain-permission-usage{
+    stroke: orange;
+}
+
+marker#domain-implicit-communication{
+    fill: black;
+}
+
+path.link.domain-implicit-communication{
+    stroke-dasharray: 0,2 1;
+}
+
+marker#PrivilegeEscalation {
+    fill: red;
+}
+
+path.link.PrivilegeEscalation{
+    stroke: red;
+}
+circle {
+    fill: #ccc;
+    stroke: #333;
+    stroke-width: 1.5px;
+}
+
+text {
+    font: 10px sans-serif;
+    pointer-events: none;
+}
+
+text.shadow {
+    stroke: #fff;
+    stroke-width: 3px;
+    stroke-opacity: .8;
+}
+
+input.MyButton {
+    width: 180px;
+    padding: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 100%;
+    background: #3366cc;
+    color: #fff;
+    border: 1px solid #3366cc;
+    border-radius: 10px;
+}
+input.MyButton:hover {
+    color: #ffff00;
+    background: #000;
+    border: 1px solid #fff;
+}
