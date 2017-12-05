@@ -6,7 +6,7 @@
     <link href="css/custom.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
-    <script src="read_csv.js"></script>
+    <script src="file_read.js"></script>
     <title> </title>
 </head>
 <body>
@@ -17,25 +17,25 @@
             <div class="body_index">
                 <label class="btn btn-info btn-lg">
                     <span class="glyphicon-upload"></span> Upload Folder
-                    <input id = "file-input" type="file" style="display: none;" onchange="$('#file-info').html(this.files[0].name)" />
+                    <input id = "file-input" type="file" multiple="multiple" style="display: none;" onchange="analyser()"/>
                 </label><br><br>
                 <label class="labell label-info" id="file-info"></label><br><br>
                 <label class="btn btn-info btn-lg">
                     <span class="glyphicon-check"></span>
                     <a href="visualize.html" class="link-font">Start Visualization</a>
                 </label>
-                <!--<script>-->
-                    <!--var files = document.querySelectorAll('input');-->
-                    <!--[].forEach.call(files, function(file){-->
-                      <!--file.onchange = function (e) {-->
-                        <!--console.log(this.files);-->
-                      <!--}-->
-                    <!--});-->
-                    <!--console.log(files.length);-->
-                <!--</script>-->
             </div>
         </div>
     </div>
+    <!--<script>-->
+      <!--var files = document.getElementById("file-input");-->
+      <!--files.addEventListener("change", function (evt) {-->
+        <!--var f = evt.target.files;-->
+        <!--for(var i=0; i<f.length; i++) {-->
+          <!--console.log(f[i].name);-->
+        <!--}-->
+      <!--})-->
+    <!--</script>-->
 
 </body>
 </html>
