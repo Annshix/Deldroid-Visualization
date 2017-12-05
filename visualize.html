@@ -51,18 +51,9 @@
     </div>
 
     <script>
-        x = localStorage.getItem('link_dpg1');
-        console.log(x);
-      $("#file-input").change(function (e) {
-        var file = this.file[0];
-        window.un = new UnZipArchive(file);
-        un.getData( function(){
-          var array = un.getEntries();
-          for(var i = 0; i < array.length; i++){
-            console.log(array[i]);
-          }
-        });
-      });
+//        x = localStorage.getItem('link_dpg1');
+//        console.log(x);
+
       var links = [{source:"edu.uci.seal.fungame.Main",target:"edu.uci.seal.fungame.LevelUp",type:"domain-explicit-communication"},
         {source:"edu.uci.seal.fungame.LevelUp",target:"edu.uci.seal.messaging.Sender",type:"domain-implicit-communication"},
         {source:"edu.uci.seal.messaging.Composer",target:"edu.uci.seal.messaging.Sender",type:"domain-implicit-communication"},
