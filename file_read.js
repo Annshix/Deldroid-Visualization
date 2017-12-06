@@ -5,7 +5,8 @@ function analyser() {
   var f = document.getElementById("file-input").files;
   $('#file-info').html(f.length.toString() + ' files uploaded !');
   for (var i = 0; i < f.length; i++) {
-    // console.log(f[i].name);
+    console.log(f[i].name);
+    console.log(f[i]);
     if (f[i].type.match('csv')) {
       read_csv(f[i]);
       }
@@ -85,6 +86,37 @@ function processData(csv, name){
 function errorHandler(evt) {
   if(evt.target.error.name == "NotReadableError") {
     alert("Cannot Read Your Files!");
+  }
+}
+
+function loadXMLDoc(dname)
+{
+  try{
+    xml = new window.XMLHttpRequest();
+    xml.open("GET", dname, false);
+    xml.send(null);
+    return xml.responseXML.documentElement;
+  }
+  catch(e){
+    try //Internet Explorer
+    {
+      xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+      xmlDoc.async = false;
+      xmlDoc.load(dname);
+      return(xmlDoc);
+    }
+    catch(e)
+    {
+      try //Firefox, Mozilla, Opera, etc.
+      {
+        xmlDoc=document.implementation.createDocument("","",null);
+        xmlDoc.async = false;
+        xmlDoc.load(dname);
+        return(xmlDoc);
+      }
+      catch(e) {alert(e.message)}
+    }
+    return(null);
   }
 }
 
@@ -287,43 +319,7 @@ function app_package(xmlname) {
     cpt_dict[cpt_name] = component;
   }
   pkg_name = appPackageName[i].childNodes[0].nodeValue;
+  console.log(cpt_dict);
   localStorage.setItem(pkg_name,JSON.stringify(cpt_dict));
 }
 
-function loadXMLDoc(dname)
-{
-  try{
-    var xhr = new window.XMLHttpRequest();
-    xhr.open("GET", dname, false);
-    xhr.setRequestHeader('Content-Type', 'text/xml');
-    xhr.send(null);
-
-    return xhr.responseXML.documentElement;
-  }
-  catch(e){
-    try //Internet Explorer
-    {
-      var xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-      xmlDoc.async = false;
-      xmlDoc.load(dname);
-
-      return xmlDoc;
-    }
-    catch(e)
-    {
-      try //Firefox, Mozilla, Opera, etc.
-      {
-        xmlDoc=document.implementation.createDocument("","",null);
-      }
-      catch(e) {alert(e.message)}
-    }
-    try
-    {
-      xmlDoc.async=false;
-      xmlDoc.load(dname);
-      return(xmlDoc);
-    }
-    catch(e) {alert(e.message)}
-    return(null);
-  }
-}
