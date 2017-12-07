@@ -6,28 +6,11 @@ function analyser() {
   $('#file-info').html(f.length.toString() + ' files uploaded !');
   for (var i = 0; i < f.length; i++) {
     console.log(f[i].name);
-    console.log(f[i]);
-    if (f[i].type.match('csv')) {
-      read_csv(f[i]);
-      }
-    else if(f[i].name == "analysisResults-0.xml"){
-      analyze_res0(f[i]);
-    }
-    else if(f[i].name == "analysisResults-1.xml"){
-      analyze_res1(f[i]);
-    }
-    else if(f[i].name == "app-System.xml"){
-    }
-    else if(f[i].type.match('xml')){
-      app_package(f[i]);
-    }
-    else{
-      alert(' Wrong Type of Files Uploaded! ')
-    }
+    read_file(f[i]);
     }
   }
 
-function read_csv(file) {
+function read_file(file) {
   var reader = new FileReader();
   reader.name = file.name;
   reader.readAsText(file);
@@ -35,14 +18,34 @@ function read_csv(file) {
   reader.onerror = errorHandler;
 }
 function loadHandler(event){
-  var csv = event.target.result;
-  processData(csv, event.target.name);
+  var f = event.target.result;
+  processData(f, event.target.name);
   // var test1 = JSON.parse(localStorage.getItem('dec1'));
   // var test2 = JSON.parse(localStorage.getItem('link_dec1'));
   // console.log(test1);
   // console.log(test2);
 }
-function processData(csv, name){
+function processData(f, name){
+  if(name.split('.').pop().toLowerCase() == 'csv'){
+    processCsvData(f, name)
+  }
+  else if(name == "analysisResults-0.xml"){
+    analyze_res0(f);
+  }
+  else if(name == "analysisResults-1.xml"){
+      analyze_res1(f);
+    }
+    else if(name == "app-System.xml"){
+    }
+    else if(name.split('.').pop().toLowerCase() == 'xml'){
+      console.log(f);
+      app_package(f);
+    }
+    else{
+      alert(' Wrong Type of Files Uploaded! ')
+    }
+}
+function processCsvData(csv, name){
   x = {};
   link = [];
   var lines = csv.split(/\r\n|\n/);
@@ -92,10 +95,9 @@ function errorHandler(evt) {
 function loadXMLDoc(dname)
 {
   try{
-    xml = new window.XMLHttpRequest();
-    xml.open("GET", dname, false);
-    xml.send(null);
-    return xml.responseXML.documentElement;
+    var parser = new DOMParser();
+    doc = parser.parseFromString(dname, "application/xml");
+    return doc;
   }
   catch(e){
     try //Internet Explorer
@@ -234,92 +236,139 @@ function app_package(xmlname) {
   for (i = 0; i < componentId.length; i++) {
 
     component = {};
-    component['component_Name'] = compName[i].childNodes[0].nodeValue;
-    component['component_Id'] = componentId[i].childNodes[0].nodeValue;
-    component['dsmIdx'] = dsmIdx[i].childNodes[0].nodeValue;
-    component['type'] = type[i].childNodes[0].nodeValue;
-    component['exported'] = exported[i].childNodes[0].nodeValue;
-    component['requiredPrmToAccess'] = requiredPrmToAccess[i].childNodes[0].nodeValue;
-    component['providerReadPermission'] = providerReadPermission[i].childNodes[0].nodeValue;
-    component['providerWriterPermission'] = providerWritePermission[i].childNodes[0].nodeValue;
-    component['providerAuthority'] = providerAuthority[i].childNodes[0].nodeValue;
+    if(typeof(compName[i]) != "undefined" && compName[i] != null && typeof(compName[i].childNodes[0]) != "undefined" && compName[i].childNodes[0] != null){
+      component['component_Name'] = compName[i].childNodes[0].nodeValue;
+    }
+    else{
+      component['component_Name'] = null;
+    }
+    if(typeof(componentId[i])!="undefined" && typeof(componentId[i].childNodes[0])!="undefined"){
+      component['component_Id'] = componentId[i].childNodes[0].nodeValue;
+    }
+    else{
+      component['component_Id'] = null;
+    }
+    if(typeof(dsmIdx[i]) != "undefined" && typeof(dsmIdx[i].childNodes[0]) != "undefined"){
+      component['dsmIdx'] = dsmIdx[i].childNodes[0].nodeValue;
+    }
+    else{
+      component['dsmIdx'] = null;
+    }
+    if(typeof(type[i]) != "undefined" && typeof(type[i].childNodes[0]) != "undefined"){
+      component['type'] = type[i].childNodes[0].nodeValue;
+    }
+    else{
+      component['type'] = null;
+    }
+    if(typeof(exported[i]) != "undefined" && typeof(exported[i].childNodes[0]) != "undefined"){
+      component['exported'] = exported[i].childNodes[0].nodeValue;
+    }
+    else{
+      component['exported'] = null;
+    }
+    if(typeof(requiredPrmToAccess[i]) != "undefined" && typeof(requiredPrmToAccess[i].childNodes[0]) != "undefined"){
+      component['requiredPrmToAccess'] = requiredPrmToAccess[i].childNodes[0].nodeValue;
+    }
+    else{
+      component['requiredPrmToAccess'] = null;
+    }
+    if(typeof(providerReadPermission[i]) != "undefined" && typeof(providerReadPermission[i].childNodes[0]) != "undefined"){
+      component['providerReadPermission'] = providerReadPermission[i].childNodes[0].nodeValue;
+    }
+    else{
+      component['providerReadPermission'] = null;
+    }
+    if(typeof(providerAuthority[i]) != "undefined" && typeof(providerAuthority[i].childNodes[0]) != "undefined"){
+      component['providerAuthority'] = providerAuthority[i].childNodes[0].nodeValue;
+    }
+    else{
+      component['providerAuthority'] = null;
+    }
+
 
     var tmp1 = [];
-    for (j = 1; j < compRequiredPermissions[i].childNodes.length; j = j + 2) {
-      tmp1.push(compRequiredPermissions[i].childNodes[j].childNodes[0].nodeValue);
+    if(typeof(compRequiredPermissions[i]) != "undefined" && compRequiredPermissions[i].childNodes.length > 0){
+      for (j = 1; j < compRequiredPermissions[i].childNodes.length; j = j + 2) {
+          tmp1.push(compRequiredPermissions[i].childNodes[j].childNodes[0].nodeValue);
+      }
     }
+
     component['compRequiredPermission'] = tmp1;
 
     var tmp2 = [];
-    for (j = 1; j < compActuallyUsedPermissions[i].childNodes.length; j = j + 1) {
-      if (compActuallyUsedPermissions[i].childNodes[j].nodeType == 1) {
-        tmp2.push(compActuallyUsedPermissions[i].childNodes[j].childNodes[0].nodeValue);
-      }
-    }
-    component['compActuallyUsedPermission'] = tmp2;
-
-    var tmp3 = {};
-    for (j = 1; j < intentFilters[i].childNodes.length; j = j + 1) {
-      var tmp = [];
-      if (intentFilters[i].childNodes[j].nodeType == 1) {
-        document.write("intentFilters" + ":" + '<br/>');
-        document.write(intentFilters[i].childNodes[j].nodeName + '<br/>');
-        for (k = 1; k < intentFilters[i].childNodes[j].childNodes.length; k++) {
-          if (intentFilters[i].childNodes[j].childNodes[k].nodeType == 1) {
-            document.write(intentFilters[i].childNodes[j].childNodes[k].nodeName + '<br/>');
-            if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'ifID') {
-              document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '<br/>');
-              output = output + "<br> " + "ifID:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + "</br>";
-            }
-            if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'actions') {
-              document.write("action : ");
-              for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
-                if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
-                  document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + '<br/>');
-                  output = output + "<br> " + "intentFilter.action:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + "</br>";
-                }
-              }
-            }
-            if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'categories') {
-              document.write("categories : ");
-              for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
-                if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
-                  document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + '<br/>');
-                  output = output + "<br> " + "intentFilter.category:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + "</br>";
-                }
-              }
-            }
-            if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'data') {
-              document.write("data : " + '<br/>');
-              for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
-                if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
-                  document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes.length + '<br/>');
-                  for (n = 1; n < intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes.length; n = n + 1)
-                    if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeType == 1) {
-                      document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeName + ': ' + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].childNodes[0].nodeValue + '<br/>');
-                      output = output + "<br>" + "intentFilter.data." + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeName + ': ' + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].childNodes[0].nodeValue + '</br>';
-                    }
-
-
-                }
-              }
-            }
-
-            if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'dataPath') {
-              document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '<br/>' + '<br/>');
-              output = output + "<br>" + "intentFilter.dataPath:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '</br>';
-            }
-
-          }
+    if(typeof(compActuallyUsedPermissions[i]) != "undefined" && compActuallyUsedPermissions[i].childNodes.length > 0){
+      for (j = 1; j < compActuallyUsedPermissions[i].childNodes.length; j = j + 1) {
+        if (compActuallyUsedPermissions[i].childNodes[j].nodeType == 1) {
+          tmp2.push(compActuallyUsedPermissions[i].childNodes[j].childNodes[0].nodeValue);
         }
       }
     }
 
+    component['compActuallyUsedPermission'] = tmp2;
+
+    // var tmp3 = {};
+    // for (j = 1; j < intentFilters[i].childNodes.length; j = j + 1) {
+    //   var tmp = [];
+    //   if (intentFilters[i].childNodes[j].nodeType == 1) {
+    //     document.write("intentFilters" + ":" + '<br/>');
+    //     document.write(intentFilters[i].childNodes[j].nodeName + '<br/>');
+    //     for (k = 1; k < intentFilters[i].childNodes[j].childNodes.length; k++) {
+    //       if (intentFilters[i].childNodes[j].childNodes[k].nodeType == 1) {
+    //         document.write(intentFilters[i].childNodes[j].childNodes[k].nodeName + '<br/>');
+    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'ifID') {
+    //           document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '<br/>');
+    //           output = output + "<br> " + "ifID:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + "</br>";
+    //         }
+    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'actions') {
+    //           document.write("action : ");
+    //           for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
+    //             if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
+    //               document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + '<br/>');
+    //               output = output + "<br> " + "intentFilter.action:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + "</br>";
+    //             }
+    //           }
+    //         }
+    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'categories') {
+    //           document.write("categories : ");
+    //           for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
+    //             if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
+    //               document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + '<br/>');
+    //               output = output + "<br> " + "intentFilter.category:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + "</br>";
+    //             }
+    //           }
+    //         }
+    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'data') {
+    //           document.write("data : " + '<br/>');
+    //           for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
+    //             if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
+    //               document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes.length + '<br/>');
+    //               for (n = 1; n < intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes.length; n = n + 1)
+    //                 if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeType == 1) {
+    //                   document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeName + ': ' + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].childNodes[0].nodeValue + '<br/>');
+    //                   output = output + "<br>" + "intentFilter.data." + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeName + ': ' + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].childNodes[0].nodeValue + '</br>';
+    //                 }
+    //
+    //
+    //             }
+    //           }
+    //         }
+    //
+    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'dataPath') {
+    //           document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '<br/>' + '<br/>');
+    //           output = output + "<br>" + "intentFilter.dataPath:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '</br>';
+    //         }
+    //
+    //       }
+    //     }
+    //   }
+    // }
+
     cpt_name = compName[i].childNodes[0].nodeValue;
     cpt_dict[cpt_name] = component;
   }
-  pkg_name = appPackageName[i].childNodes[0].nodeValue;
+
   console.log(cpt_dict);
+  pkg_name = xmlDoc.getElementsByTagName("packageName").nodeValue;
   localStorage.setItem(pkg_name,JSON.stringify(cpt_dict));
 }
 
