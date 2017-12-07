@@ -142,7 +142,7 @@ function analyze_res0(f){
     if(typeof(appPackageName[i*3+2])!="undefined" && typeof(appPackageName[i*3+2].childNodes[0])!="undefined"){
       xl = [appPackageName[i*3+2].childNodes[0].nodeValue, compName[i*3+2].childNodes[0].nodeValue];
     }
-    tmp = {r:rl, s:sl, x:xl};
+    tmp = {sender:rl, receiver:sl, resource:xl};
     if(rComponent[i].parentNode.nodeName=="intentSpoofingInstance"){
       iSI_1.push(tmp);
     }
@@ -203,7 +203,7 @@ function analyze_res1(f){
     if(typeof(appPackageName[i*3+2])!="undefined" && typeof(appPackageName[i*3+2].childNodes[0])!="undefined"){
       xl = [appPackageName[i*3+2].childNodes[0].nodeValue, compName[i*3+2].childNodes[0].nodeValue];
     }
-    tmp = {r:rl, s:sl, x:xl};
+    tmp = {sender:rl, receiver:sl, resource:xl};
     if(rComponent[i].parentNode.nodeName=="intentSpoofingInstance"){
       iSI_2.push(tmp);
     }
