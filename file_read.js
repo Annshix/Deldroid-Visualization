@@ -32,7 +32,7 @@ function processData(f, name){
   else if(name == "analysisResults-0.xml"){
     analyze_res0(f);
   }
-  else if(name == "analysisResults-1.xml"){
+  else if(name == "analysisResults-5.xml"){
       analyze_res1(f);
     }
     else if(name == "app-System.xml"){
@@ -164,11 +164,15 @@ function analyze_res1(f){
   resourceDsmIdx=xmlDoc.getElementsByTagName("resourceDsmIdx");
   resource=xmlDoc.getElementsByTagName("resource");
 
+  privilegeEscalationInstance = xmlDoc.getElementsByTagName("privilegeEscalationInstance");
+  intentSpoofingInstance = xmlDoc.getElementsByTagName("intentSpoofingInstance");
+  unauthorizedIntentReceiptInstance = xmlDoc.getElementsByTagName("unauthorizedIntentReceiptInstance");
+
 
   pEI_2 = [];
   iSI_2 = [];
   uIRI_2 = [];
-  for(i = 0; i < malApp.length; i++){
+  for(i = 0; i < privilegeEscalationInstance.length; i++){
     s = null; x = null; r = null;
     if(typeof(malApp[i])!="undefined" && typeof(malApp[i].childNodes[0]) != "undefined"){
       s = [malApp[i].childNodes[0].nodeValue, malComp[i].childNodes[0].nodeValue];
@@ -182,37 +186,45 @@ function analyze_res1(f){
     tmp = {sender:s, receiver: r, resource: x};
     pEI_2.push(tmp);
   }
+  console.log(pEI_2);
   localStorage.setItem('pEI_2', JSON.stringify(pEI_2));
 
-
-  rComponent=xmlDoc.getElementsByTagName("rComponent");
-  sComponent=xmlDoc.getElementsByTagName("sComponent");
-  xComponent=xmlDoc.getElementsByTagName("xComponent");
-
-  compName = xmlDoc.getElementsByTagName("compName");
-  appPackageName = xmlDoc.getElementsByTagName("appPackageName");
-
-  for(i = 0; i< rComponent.length; i++){
-    rl = null; sl = null; xl = null;
-    if(typeof(appPackageName[i*3])!="undefined" && typeof(appPackageName[i*3].childNodes[0])!="undefined"){
-      rl = [appPackageName[i*3].childNodes[0].nodeValue, compName[i*3].childNodes[0].nodeValue];
+  for(i = privilegeEscalationInstance.length; i < privilegeEscalationInstance.length + intentSpoofingInstance.length; i++){
+    s = null; x = null; r = null;
+    if(typeof(malApp[i])!="undefined" && typeof(malApp[i].childNodes[0]) != "undefined"){
+      s = [malApp[i].childNodes[0].nodeValue, malComp[i].childNodes[0].nodeValue];
     }
-    if(typeof(appPackageName[i*3+1])!="undefined" && typeof(appPackageName[i*3+1].childNodes[0])!="undefined"){
-      sl = [appPackageName[i*3+1].childNodes[0].nodeValue, compName[i*3+1].childNodes[0].nodeValue];
+    if(typeof(vulApp[i])!="undefined" && typeof(vulApp[i].childNodes[0])!="undefined"){
+      r = [vulApp[i].childNodes[0].nodeValue, vulComp[i].childNodes[0].nodeValue];
     }
-    if(typeof(appPackageName[i*3+2])!="undefined" && typeof(appPackageName[i*3+2].childNodes[0])!="undefined"){
-      xl = [appPackageName[i*3+2].childNodes[0].nodeValue, compName[i*3+2].childNodes[0].nodeValue];
+    if(typeof(resourceDsmIdx[i])!="undefined" && typeof(resourceDsmIdx[i].childNodes[0])!="undefined"){
+      x = [resourceDsmIdx[i].childNodes[0].nodeValue, resource[i].childNodes[0].nodeValue];
     }
-    tmp = {sender:rl, receiver:sl, resource:xl};
-    if(rComponent[i].parentNode.nodeName=="intentSpoofingInstance"){
-      iSI_2.push(tmp);
-    }
-    else{
-      uIRI_2.push(tmp);
-    }
+    tmp = {sender:s, receiver: r, resource: x};
+    iSI_2.push(tmp);
   }
+  console.log(iSI_2);
   localStorage.setItem('iSI_2', JSON.stringify(iSI_2));
+
+  for(i = privilegeEscalationInstance.length + intentSpoofingInstance.length; i < privilegeEscalationInstance.length + intentSpoofingInstance.length + unauthorizedIntentReceiptInstance.length; i++){
+    s = null; x = null; r = null;
+    if(typeof(malApp[i])!="undefined" && typeof(malApp[i].childNodes[0]) != "undefined"){
+      s = [malApp[i].childNodes[0].nodeValue, malComp[i].childNodes[0].nodeValue];
+    }
+    if(typeof(vulApp[i])!="undefined" && typeof(vulApp[i].childNodes[0])!="undefined"){
+      r = [vulApp[i].childNodes[0].nodeValue, vulComp[i].childNodes[0].nodeValue];
+    }
+    if(typeof(resourceDsmIdx[i])!="undefined" && typeof(resourceDsmIdx[i].childNodes[0])!="undefined"){
+      x = [resourceDsmIdx[i].childNodes[0].nodeValue, resource[i].childNodes[0].nodeValue];
+    }
+    tmp = {sender:s, receiver: r, resource: x};
+    uIRI_2.push(tmp);
+  }
+  console.log(uIRI_2);
   localStorage.setItem('uIRI_2', JSON.stringify(uIRI_2));
+
+  console.log(iSI_2);
+  console.log(uIRI_2);
 }
 
 function app_package(xmlname) {
