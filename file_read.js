@@ -38,7 +38,7 @@ function processData(f, name){
     else if(name == "app-System.xml"){
     }
     else if(name.split('.').pop().toLowerCase() == 'xml'){
-      console.log(f);
+      // console.log(f);
       app_package(f);
     }
     else{
@@ -130,7 +130,17 @@ function analyze_res0(f){
   receiverDsmIdx=xmlDoc.getElementsByTagName("receiverDsmIdx");
   resourceDsmIdx=xmlDoc.getElementsByTagName("resourceDsmIdx");
   for(i = 0; i < senderDsmIdx.length; i++){
-    tmp = {sender:senderDsmIdx[i].childNodes[0].nodeValue, receiver: receiverDsmIdx[i].childNodes[0].nodeValue, resource: resourceDsmIdx[i].childNodes[0].nodeValue};
+    s = null; x = null; r = null;
+    if(typeof(senderDsmIdx[i])!="undefined" && typeof(senderDsmIdx[i].childNodes[0]) != "undefined"){
+      s = senderDsmIdx[i].childNodes[0].nodeValue;
+    }
+    if(typeof(receiverDsmIdx[i])!="undefined" && typeof(receiverDsmIdx[i].childNodes[0])!="undefined"){
+      r = receiverDsmIdx[i].childNodes[0].nodeValue;
+    }
+    if(typeof(resourceDsmIdx[i])!="undefined" && typeof(resourceDsmIdx[i].childNodes[0])!="undefined"){
+      x = resourceDsmIdx[i].childNodes[0].nodeValue;
+    }
+    tmp = {sender:s, receiver: r, resource: x};
     pEI_1.push(tmp);
   }
   localStorage.setItem('pEI_1', JSON.stringify(pEI_1));
@@ -146,10 +156,16 @@ function analyze_res0(f){
   appPackageName = xmlDoc.getElementsByTagName("appPackageName");
 
   for(i = 0; i< rComponent.length; i++){
-    rl = [appPackageName[i*3].childNodes[0].nodeValue, compName[i*3].childNodes[0].nodeValue];
-    sl = [appPackageName[i*3+1].childNodes[0].nodeValue, compName[i*3+1].childNodes[0].nodeValue];
-    xl = [appPackageName[i*3+2].childNodes[0].nodeValue, compName[i*3+2].childNodes[0].nodeValue];
-
+    rl = null; sl = null; xl = null;
+    if(typeof(appPackageName[i*3])!="undefined" && typeof(appPackageName[i*3].childNodes[0])!="undefined"){
+      rl = [appPackageName[i*3].childNodes[0].nodeValue, compName[i*3].childNodes[0].nodeValue];
+    }
+    if(typeof(appPackageName[i*3+1])!="undefined" && typeof(appPackageName[i*3+1].childNodes[0])!="undefined"){
+      sl = [appPackageName[i*3+1].childNodes[0].nodeValue, compName[i*3+1].childNodes[0].nodeValue];
+    }
+    if(typeof(appPackageName[i*3+2])!="undefined" && typeof(appPackageName[i*3+2].childNodes[0])!="undefined"){
+      xl = [appPackageName[i*3+2].childNodes[0].nodeValue, compName[i*3+2].childNodes[0].nodeValue];
+    }
     tmp = {r:rl, s:sl, x:xl};
     if(rComponent[i].parentNode.nodeName=="intentSpoofingInstance"){
       iSI_1.push(tmp);
@@ -167,12 +183,8 @@ function analyze_res1(f){
 
   malApp=xmlDoc.getElementsByTagName("malApp");
   malComp=xmlDoc.getElementsByTagName("malComp");
-  malCompId=xmlDoc.getElementsByTagName("malCompId");
-  malCompDsmIdx=xmlDoc.getElementsByTagName("malCompDsmIdx");
   vulApp=xmlDoc.getElementsByTagName("vulApp");
   vulComp=xmlDoc.getElementsByTagName("vulComp");
-  vulCompId=xmlDoc.getElementsByTagName("vulCompId");
-  vulCompDsmIdx=xmlDoc.getElementsByTagName("vulCompDsmIdx");
   resourceDsmIdx=xmlDoc.getElementsByTagName("resourceDsmIdx");
   resource=xmlDoc.getElementsByTagName("resource");
 
@@ -181,11 +193,18 @@ function analyze_res1(f){
   iSI_2 = [];
   uIRI_2 = [];
   for(i = 0; i < malApp.length; i++){
-    mal_list = [malApp[i].childNodes[0].nodeValue, malComp[i].childNodes[0].nodeValue, malCompId[i].childNodes[0].nodeValue, malCompDsmIdx[i].childNodes[0].nodeValue];
-    vul_list = [vulApp[i].childNodes[0].nodeValue, vulComp[i].childNodes[0].nodeValue, vulCompId[i].childNodes[0].nodeValue, vulCompDsmIdx[i].childNodes[0].nodeValue];
-    resource_list = [resourceDsmIdx[i].childNodes[0].nodeValue, resource[i].childNodes[0].nodeValue];
-    tmp = {mal:mal_list, vul: vul_list, resource: resource_list};
-    pEI_2.push(tmp)
+    s = null; x = null; r = null;
+    if(typeof(malApp[i])!="undefined" && typeof(malApp[i].childNodes[0]) != "undefined"){
+      s = [malApp[i].childNodes[0].nodeValue, malComp[i].childNodes[0].nodeValue];
+    }
+    if(typeof(vulApp[i])!="undefined" && typeof(vulApp[i].childNodes[0])!="undefined"){
+      r = [vulApp[i].childNodes[0].nodeValue, vulComp[i].childNodes[0].nodeValue];
+    }
+    if(typeof(resourceDsmIdx[i])!="undefined" && typeof(resourceDsmIdx[i].childNodes[0])!="undefined"){
+      x = [resourceDsmIdx[i].childNodes[0].nodeValue, resource[i].childNodes[0].nodeValue];
+    }
+    tmp = {sender:s, receiver: r, resource: x};
+    pEI_2.push(tmp);
   }
   localStorage.setItem('pEI_2', JSON.stringify(pEI_2));
 
@@ -198,10 +217,16 @@ function analyze_res1(f){
   appPackageName = xmlDoc.getElementsByTagName("appPackageName");
 
   for(i = 0; i< rComponent.length; i++){
-    rl = [appPackageName[i*3].childNodes[0].nodeValue, compName[i*3].childNodes[0].nodeValue];
-    sl = [appPackageName[i*3+1].childNodes[0].nodeValue, compName[i*3+1].childNodes[0].nodeValue];
-    xl = [appPackageName[i*3+2].childNodes[0].nodeValue, compName[i*3+2].childNodes[0].nodeValue];
-
+    rl = null; sl = null; xl = null;
+    if(typeof(appPackageName[i*3])!="undefined" && typeof(appPackageName[i*3].childNodes[0])!="undefined"){
+      rl = [appPackageName[i*3].childNodes[0].nodeValue, compName[i*3].childNodes[0].nodeValue];
+    }
+    if(typeof(appPackageName[i*3+1])!="undefined" && typeof(appPackageName[i*3+1].childNodes[0])!="undefined"){
+      sl = [appPackageName[i*3+1].childNodes[0].nodeValue, compName[i*3+1].childNodes[0].nodeValue];
+    }
+    if(typeof(appPackageName[i*3+2])!="undefined" && typeof(appPackageName[i*3+2].childNodes[0])!="undefined"){
+      xl = [appPackageName[i*3+2].childNodes[0].nodeValue, compName[i*3+2].childNodes[0].nodeValue];
+    }
     tmp = {r:rl, s:sl, x:xl};
     if(rComponent[i].parentNode.nodeName=="intentSpoofingInstance"){
       iSI_2.push(tmp);
