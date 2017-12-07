@@ -92,34 +92,10 @@ function errorHandler(evt) {
   }
 }
 
-function loadXMLDoc(dname)
-{
-  try{
-    var parser = new DOMParser();
-    doc = parser.parseFromString(dname, "application/xml");
-    return doc;
-  }
-  catch(e){
-    try //Internet Explorer
-    {
-      xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-      xmlDoc.async = false;
-      xmlDoc.load(dname);
-      return(xmlDoc);
-    }
-    catch(e)
-    {
-      try //Firefox, Mozilla, Opera, etc.
-      {
-        xmlDoc=document.implementation.createDocument("","",null);
-        xmlDoc.async = false;
-        xmlDoc.load(dname);
-        return(xmlDoc);
-      }
-      catch(e) {alert(e.message)}
-    }
-    return(null);
-  }
+function loadXMLDoc(dname) {
+  var parser = new DOMParser();
+  doc = parser.parseFromString(dname, "application/xml");
+  return doc;
 }
 
 function analyze_res0(f){
@@ -393,7 +369,9 @@ function app_package(xmlname) {
   }
 
   console.log(cpt_dict);
-  pkg_name = xmlDoc.getElementsByTagName("packageName").nodeValue;
+  pkg_name = xmlDoc.getElementsByTagName("packageName")[0].childNodes[0].nodeValue;
+  console.log(pkg_name);
   localStorage.setItem(pkg_name,JSON.stringify(cpt_dict));
+
 }
 
