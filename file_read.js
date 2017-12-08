@@ -65,19 +65,19 @@ function processCsvData(csv, name){
     }
   }
   // console.log(x['ID']);
-  if(name=="domain-explicit-communication-1.csv"){
+  if(name=="domain-explicit-communication-5.csv"){
     localStorage.setItem('dec1', JSON.stringify(x));
     localStorage.setItem('link_dec1', JSON.stringify(link));
   }
-  else if(name=="domain-implicit-communication-1.csv"){
+  else if(name=="domain-implicit-communication-5.csv"){
     localStorage.setItem('dic1', JSON.stringify(x));
     localStorage.setItem('link_dic1', JSON.stringify(link));
   }
-  else if(name=="domain-permission-enforcement-1.csv"){
+  else if(name=="domain-permission-enforcement-5.csv"){
     localStorage.setItem('dpe1', JSON.stringify(x));
     localStorage.setItem('link_dpe1', JSON.stringify(link));
   }
-  else if(name=="domain-permission-granted-1.csv"){
+  else if(name=="domain-permission-granted-5.csv"){
     localStorage.setItem('dpg1', JSON.stringify(x));
     localStorage.setItem('link_dpg1', JSON.stringify(link));
   }
@@ -161,8 +161,8 @@ function analyze_res1(f){
   malComp=xmlDoc.getElementsByTagName("malComp");
   vulApp=xmlDoc.getElementsByTagName("vulApp");
   vulComp=xmlDoc.getElementsByTagName("vulComp");
-  resourceDsmIdx=xmlDoc.getElementsByTagName("resourceDsmIdx");
-  resource=xmlDoc.getElementsByTagName("resource");
+  potApp=xmlDoc.getElementsByTagName("potApp");
+  potComp=xmlDoc.getElementsByTagName("malComp");
 
   privilegeEscalationInstance = xmlDoc.getElementsByTagName("privilegeEscalationInstance");
   intentSpoofingInstance = xmlDoc.getElementsByTagName("intentSpoofingInstance");
@@ -180,8 +180,8 @@ function analyze_res1(f){
     if(typeof(vulApp[i])!="undefined" && typeof(vulApp[i].childNodes[0])!="undefined"){
       r = [vulApp[i].childNodes[0].nodeValue, vulComp[i].childNodes[0].nodeValue];
     }
-    if(typeof(resourceDsmIdx[i])!="undefined" && typeof(resourceDsmIdx[i].childNodes[0])!="undefined"){
-      x = [resourceDsmIdx[i].childNodes[0].nodeValue, resource[i].childNodes[0].nodeValue];
+    if(typeof(potApp[i])!="undefined" && typeof(potApp[i].childNodes[0])!="undefined"){
+      x = [potApp[i].childNodes[0].nodeValue, potComp[i].childNodes[0].nodeValue];
     }
     tmp = {sender:s, receiver: r, resource: x};
     pEI_2.push(tmp);
@@ -197,8 +197,8 @@ function analyze_res1(f){
     if(typeof(vulApp[i])!="undefined" && typeof(vulApp[i].childNodes[0])!="undefined"){
       r = [vulApp[i].childNodes[0].nodeValue, vulComp[i].childNodes[0].nodeValue];
     }
-    if(typeof(resourceDsmIdx[i])!="undefined" && typeof(resourceDsmIdx[i].childNodes[0])!="undefined"){
-      x = [resourceDsmIdx[i].childNodes[0].nodeValue, resource[i].childNodes[0].nodeValue];
+    if(typeof(potApp[i])!="undefined" && typeof(potApp[i].childNodes[0])!="undefined"){
+      x = [potApp[i].childNodes[0].nodeValue, potComp[i].childNodes[0].nodeValue];
     }
     tmp = {sender:s, receiver: r, resource: x};
     iSI_2.push(tmp);
@@ -214,8 +214,8 @@ function analyze_res1(f){
     if(typeof(vulApp[i])!="undefined" && typeof(vulApp[i].childNodes[0])!="undefined"){
       r = [vulApp[i].childNodes[0].nodeValue, vulComp[i].childNodes[0].nodeValue];
     }
-    if(typeof(resourceDsmIdx[i])!="undefined" && typeof(resourceDsmIdx[i].childNodes[0])!="undefined"){
-      x = [resourceDsmIdx[i].childNodes[0].nodeValue, resource[i].childNodes[0].nodeValue];
+    if(typeof(potApp[i])!="undefined" && typeof(potApp[i].childNodes[0])!="undefined"){
+      x = [potApp[i].childNodes[0].nodeValue, potComp[i].childNodes[0].nodeValue];
     }
     tmp = {sender:s, receiver: r, resource: x};
     uIRI_2.push(tmp);
@@ -318,63 +318,6 @@ function app_package(xmlname) {
     }
 
     component['compActuallyUsedPermission'] = tmp2;
-
-    // var tmp3 = {};
-    // for (j = 1; j < intentFilters[i].childNodes.length; j = j + 1) {
-    //   var tmp = [];
-    //   if (intentFilters[i].childNodes[j].nodeType == 1) {
-    //     document.write("intentFilters" + ":" + '<br/>');
-    //     document.write(intentFilters[i].childNodes[j].nodeName + '<br/>');
-    //     for (k = 1; k < intentFilters[i].childNodes[j].childNodes.length; k++) {
-    //       if (intentFilters[i].childNodes[j].childNodes[k].nodeType == 1) {
-    //         document.write(intentFilters[i].childNodes[j].childNodes[k].nodeName + '<br/>');
-    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'ifID') {
-    //           document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '<br/>');
-    //           output = output + "<br> " + "ifID:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + "</br>";
-    //         }
-    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'actions') {
-    //           document.write("action : ");
-    //           for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
-    //             if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
-    //               document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + '<br/>');
-    //               output = output + "<br> " + "intentFilter.action:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + "</br>";
-    //             }
-    //           }
-    //         }
-    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'categories') {
-    //           document.write("categories : ");
-    //           for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
-    //             if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
-    //               document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + '<br/>');
-    //               output = output + "<br> " + "intentFilter.category:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[0].nodeValue + "</br>";
-    //             }
-    //           }
-    //         }
-    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'data') {
-    //           document.write("data : " + '<br/>');
-    //           for (m = 1; m < intentFilters[i].childNodes[j].childNodes[k].childNodes.length; m = m + 1) {
-    //             if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].nodeType == 1) {
-    //               document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes.length + '<br/>');
-    //               for (n = 1; n < intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes.length; n = n + 1)
-    //                 if (intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeType == 1) {
-    //                   document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeName + ': ' + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].childNodes[0].nodeValue + '<br/>');
-    //                   output = output + "<br>" + "intentFilter.data." + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].nodeName + ': ' + intentFilters[i].childNodes[j].childNodes[k].childNodes[m].childNodes[n].childNodes[0].nodeValue + '</br>';
-    //                 }
-    //
-    //
-    //             }
-    //           }
-    //         }
-    //
-    //         if (intentFilters[i].childNodes[j].childNodes[k].nodeName == 'dataPath') {
-    //           document.write(intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '<br/>' + '<br/>');
-    //           output = output + "<br>" + "intentFilter.dataPath:" + intentFilters[i].childNodes[j].childNodes[k].childNodes[0].nodeValue + '</br>';
-    //         }
-    //
-    //       }
-    //     }
-    //   }
-    // }
 
     cpt_name = compName[i].childNodes[0].nodeValue;
     cpt_dict[cpt_name] = component;

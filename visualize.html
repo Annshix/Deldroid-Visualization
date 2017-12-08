@@ -32,6 +32,20 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                  <li role="presentation">
+                      <a role="menuitem" tabindex="-1" onclick="Ec()"> ExplicitCommunication </a>
+                  </li>
+                  <li role="presentation">
+                      <a role="menuitem" tabindex="-1" onclick="Ic()"> ImplicitCommunication </a>
+                  </li>
+                  <li role="presentation">
+                      <a role="menuitem" tabindex="-1" onclick="Pe()"> PermissionEnforcement </a>
+                  </li>
+                  <li role="presentation">
+                      <a role="menuitem" tabindex="-1" onclick="Pg()"> PermissionGranted </a>
+                  </li>
+                  <li role="presentation">
+                      <a role="menuitem" tabindex="-1" onclick="Pu()"> PermissionUsage </a>
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" onclick="PrivilegeEscalation()"> PriviledgeEscalation </a>
                     </li>
@@ -41,54 +55,156 @@
                     <li role="presentation">
                         <a role="menuitem" tabindex="-1" onclick="UnauthorizedIntentReceipt()"> UnauthorizedIntentReceipt </a>
                     </li>
-                    <li role="presentation">
-                        <a role="menuitem" tabindex="-1" onclick="LP()"> LeastPriviledge </a>
                     </li>
                 </ul>
             </div>
-            <div id="newgraph" class="container-3"></div>
+            <div id="newgraph" class="container-3" style="overflow-y: scroll;">
+
+            </div>
         </div>
     </div>
 
     <script>
-//        x = localStorage.getItem('link_dpg1');
-//        console.log(x);
 
-      var links = [{source:"edu.uci.seal.fungame.Main",target:"edu.uci.seal.fungame.LevelUp",type:"domain-explicit-communication"},
-        {source:"edu.uci.seal.fungame.LevelUp",target:"edu.uci.seal.messaging.Sender",type:"domain-implicit-communication"},
-        {source:"edu.uci.seal.messaging.Composer",target:"edu.uci.seal.messaging.Sender",type:"domain-implicit-communication"},
-        {source:"edu.uci.seal.fungame.LevelUp",target:"SMS",type:"domain-permission-enforcement"},
-        {source:"edu.uci.seal.fungame.LevelUp",target:"LOCATION",type:"domain-permission-granted"},
-        {source:"edu.uci.seal.fungame.Main",target:"LOCATION",type:"domain-permission-granted"},
-        {source:"edu.uci.seal.messaging.ListMsgs",target:"BLUETOOTH",type:"domain-permission-granted"},
-        {source:"edu.uci.seal.messaging.Composer",target:"SMS",type:"domain-permission-granted"},
-        {source:"edu.uci.seal.messaging.Sender",target:"SMS",type:"domain-permission-granted"},
-        {source:"edu.uci.seal.fungame.LevelUp",target:"LOCATION",type:"domain-permission-usage"},
-        {source:"edu.uci.seal.messaging.ListMsgs",target:"BLUETOOTH",type:"domain-permission-usage"},
-        {source:"edu.uci.seal.messaging.Sender",target:"SMS",type:"domain-permission-usage"}];
+    var links1 = [];
+    var links2 = [];
+    var links3 = [];
+    var links4 = [];
+    var links5 = [];
+    var privilegeEscalationInstances = [];
+    var intentSpoofingInstances = [];
+    var unauthorizedIntentReceiptInstances = [];
+    var nodev = [];
+    var dec1 = JSON.parse(localStorage.getItem('dec1'));
+    var link_dec1 = JSON.parse(localStorage.getItem('link_dec1'));
+    var dic1 = JSON.parse(localStorage.getItem('dic1'));
+    var link_dic1 = JSON.parse(localStorage.getItem('link_dic1'));
+    var dpe1 = JSON.parse(localStorage.getItem('dpe1'));
+    var link_dpe1 = JSON.parse(localStorage.getItem('link_dpe1'));
+    var dpg1 = JSON.parse(localStorage.getItem('dpg1'));
+    var link_dpg1 = JSON.parse(localStorage.getItem('link_dpg1'));
+    var dpu1 = JSON.parse(localStorage.getItem('dpu1'));
+    var link_dpu1 = JSON.parse(localStorage.getItem('link_dpu1'));
 
-      var privilegeEscalationInstances = [{source:"edu.uci.seal.messaging.Sender",target:"edu.uci.seal.messaging.ListMsgs",value:"SMS"}];
-      var intentSpoofingInstances = [{source:"malicious(spoofing)",target:"victim",value:"correct"}];
-      var unauthorizedIntentReceiptInstances = [{source:"malicious(unauthorized)",target:"victim",value:"correct"}];
+    // comonent content
+     var size = Object.keys(dec1).length - 3;
+     console.log(size);
+    for(var i = 0; i < size; i++){
+      var content = JSON.parse(localStorage.getItem(dec1[i][0]));
+      var val = content[dec1[i][1]];
+      var neirong = "<br>PackageName: " + dec1[i][0] + "</br>";
+      if(val == null || val.length == 0){
+        val = content[dec1[i][1].split('.').pop()];
+      }
+      if(val == null || val.length == 0){
+        var compname = dec1[i][1].split('.');
+        var n = compname.length;
+        var name = compname[n-2]+ '.' + compname[n-1];
+        val = content[name];
+      }
 
-      var nodev = [{name:"edu.uci.seal.fungame.LevelUp", value:"LevelUp"},
-        {name:"edu.uci.seal.fungame.Main", value:"Main"},
-        {name:"edu.uci.seal.messaging.Composer", value:"Composer"},
-        {name:"edu.uci.seal.messaging.ListMsgs", value:"ListMsg"},
-        {name:"edu.uci.seal.messaging.Sender", value:"Sender"},
-        {name:"SMS",value:"SMS"},
-        {name:"LOCATION",value:"LOCATION"},
-        {name:"BLUETOOTH",value:"BLUETOOTH"}];
+      for(var key in val){
+        if(key =="compActuallyUsedPermission"){
+          if(val[key].length != 0 && val[key] != null){
+          for(var d in val[key]){
+            neirong += "<br>" + "compActuallyUsedPermission:" + d + "</br>";
+          }
+        }
+        else {
+          neirong += "<br>compActuallyUsedPermission: null</br>";
+        //  console.log("1");
+        }
+      }
+
+        else if (key == "compRequiredPermission"){
+          if(val[key].length == 0 || val[key] == null){
+            neirong += "<br>compRequiredPermission: null</br>";
+        //    console.log("2");
+          }
+          else{
+            for(var d in val[key]){
+              neirong += "<br>" + "compRequiredPermission:" + d + "</br>";
+            }
+          }
+        }
+
+        else if(val.hasOwnProperty(key)){
+          neirong += "<br>" +key+":"+ val[key] + "</br>";
+        }
+      }
+      nodev.push({name:dec1[i][1],value:neirong});
+      neirong = null;
+    }
+
+
+    //attack
+    var attack1 = JSON.parse(localStorage.getItem("pEI_2"));
+    for(var i = 0; i < attack1.length; i++){
+      if(attack1[i]["sender"] != null && attack1[i]["sender"].length !=0 &&attack1[i]["receiver"] != null &&attack1[i]["receiver"].length != 0 )
+        if(attack1[i]["resource"] != null && attack1[i]["resource"].length != 0)
+          privilegeEscalationInstances.push({source:attack1[i]["sender"][0],target:attack1[i]["receiver"][0],value:attack1[i]["resource"][1],type:"P"});
+        else {
+          privilegeEscalationInstances.push({source:attack1[i]["sender"][0],target:attack1[i]["receiver"][0],value:"null",type:"P"});
+        }
+    }
+
+    var attack2 = JSON.parse(localStorage.getItem("iSI_2"));
+    for(var i = 0; i < attack2.length; i++){
+      if(attack2[i]["sender"] != null && attack2[i]["sender"].length !=0 &&attack2[i]["receiver"] != null &&attack2[i]["receiver"].length != 0 )
+        if(attack2[i]["resource"] != null && attack2[i]["resource"].length != 0)
+          intentSpoofingInstances.push({source:attack2[i]["sender"][0],target:attack2[i]["receiver"][0],value:attack2[2]["resource"][1],type:"I"});
+        else {
+          intentSpoofingInstances.push({source:attack2[i]["sender"][0],target:attack2[i]["receiver"][0],value:"null",type:"I"});
+        }
+    }
+
+    var attack3 = JSON.parse(localStorage.getItem("uIRI_2"));
+    for(var i = 0; i < attack3.length; i++){
+      if(attack3[i]["sender"] != null && attack3[i]["sender"].length !=0 &&attack3[i]["receiver"] != null &&attack3[i]["receiver"].length != 0 )
+        if(attack3[i]["resource"] != null && attack3[i]["resource"].length != 0)
+          unauthorizedIntentReceiptInstances.push({source:attack3[i]["sender"][0],target:attack3[i]["receiver"][0],value:attack3[i]["resource"][1],type:"U"});
+        else {
+          unauthorizedIntentReceiptInstances.push({source:attack3[i]["sender"][0],target:attack3[i]["receiver"][0],value:"null",type:"U"});
+        }
+    }
+
+    //links
+    if(dec1 != null && link_dec1 != null){
+    for(var i = 0; i < link_dec1.length; i++){
+      links1.push({source:dec1[link_dec1[i].source][1], target:dec1[link_dec1[i].target][1], type:"domain-explicit-communication"});
+    }}
+
+    if(dic1 != null && link_dic1 != null){
+    for(var i = 0; i < link_dic1.length; i++){
+      links2.push({source:dic1[link_dic1[i].source][1], target:dic1[link_dic1[i].target][1], type:"domain-implicit-communication"});
+    }}
+
+    if(dpe1 != null && link_dpe1 != null){
+    for(var i = 0; i < link_dpe1.length; i++){
+      links3.push({source: dpe1[link_dpe1[i].source][1], target:link_dpe1[i].target.substring(4,link_dpe1[i].target.length), type:"domain-permission-enforcement"});
+    }}
+
+    if(dpg1 != null && link_dpg1 != null){
+    for(var i = 0; i < link_dpg1.length; i++){
+      links4.push({source: dpg1[link_dpg1[i].source][1], target:link_dpg1[i].target.substring(4,link_dpg1[i].target.length), type:"domain-permission-granted"});
+    }}
+
+    if(dpu1 != null && link_dpu1 != null){
+    for(var i = 0; i < link_dpu1.length; i++){
+      links5.push({source:dpu1[link_dpu1[i].source][1], target:link_dpu1[i].target.substring(4,link_dpu1[i].target.length), type:"domain-permission-usage"});
+    }}
 
       var tag;
+      var parent = document.getElementById("newgraph");
 
       var svg = d3.select("div#newgraph").append("svg:svg")
-        .attr("width", window.innerWidth)
-        .attr("height", window.innerHeight);
+        .attr("width", parent.clientWidth)
+        .attr("height", parent.clientHeight);
+
 
       // Per-type markers, as they don't inherit styles.
       svg.append("svg:defs").selectAll("marker")
-        .data(["domain-implicit-communication", "domain-explicit-communication", "domain-permission-enforcement","domain-permission-granted","domain-permission-usage"])
+        .data(["domain-implicit-communication", "domain-explicit-communication", "domain-permission-enforcement","domain-permission-granted","domain-permission-usage","P","I","U"])
         .enter().append("svg:marker")
         .attr("id", String)
         .attr("viewBox", "0 -5 10 10")
@@ -100,10 +216,34 @@
         .append("svg:path")
         .attr("d", "M0,-5L10,0L0,5");
 
-      function LP(){
+      function Ec(){
         svg.selectAll("g").remove();
-        tag = "LP";
-        visualization(clone(links));
+        tag = "Ec";
+        visualization(clone(links1));
+      }
+
+      function Ic(){
+        svg.selectAll("g").remove();
+        tag = "Ic";
+        visualization(clone(links2));
+      }
+
+      function Pe(){
+        svg.selectAll("g").remove();
+        tag = "Pe";
+        visualization(clone(links3));
+      }
+
+      function Pg(){
+        svg.selectAll("g").remove();
+        tag = "Pg";
+        visualization(clone(links4));
+      }
+
+      function Pu(){
+        svg.selectAll("g").remove();
+        tag = "Pu";
+        visualization(clone(links5));
       }
 
       function PrivilegeEscalation(){
@@ -158,7 +298,7 @@
           .nodes(d3.values(nodes))
           .links(links)
           .size([w, h])
-          .linkDistance(100)
+          .linkDistance(50)
           .charge(-300)
           .on("tick", tick)
           .start();
@@ -175,7 +315,7 @@
           .attr("r", 6)
           .call(force.drag)
           .on("mouseover", function(d){
-            if(tag == "LP"){
+            if(tag == "Ec" || tag == "Ic" || tag == "Pe" || tag == "Pg" || tag == "Pu"){
               for(var i = 0; i<nodev.length; i++){
                 if(nodev[i].name == d.name){
                   document.getElementById("info").innerHTML="<label class='infotype'>"+nodev[i].value+"</label>";}
@@ -247,7 +387,7 @@
           });
         }
       }
-      console.log('1');
+
 
       function clone(obj) {
         // Handle the 3 simple types, and null or undefined
